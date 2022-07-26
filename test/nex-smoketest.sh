@@ -28,18 +28,28 @@ fi
 echo STD_APP_URL=${STD_APP_URL}
 
 # Test: Create Products
-echo "=== Creating a product id: the_odyssey ==="
+echo $'\n'=== Creating a product id: the_odyssey ===
 curl -s -XPOST  "${STD_APP_URL}/products" \
     -H 'accept: application/json' \
     -H 'Content-Type: application/json' \
     -d '{"id": "the_odyssey", "title": "The Odyssey", "passenger_capacity": 101, "maximum_speed": 5, "in_stock": 10}'
-echo
+
 # Test: Get Product
-echo "=== Getting product id: the_odyssey ==="
+echo $'\n\n'=== Getting product id: the_odyssey ===
 curl -s "${STD_APP_URL}/products/the_odyssey" | jq .
 
+# Test: Delete Product
+echo $'\n'=== Creating a product id: delete_me ===
+curl -s -XPOST  "${STD_APP_URL}/products" \
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -d '{"id": "delete_me", "title": "delete this product", "passenger_capacity": 10, "maximum_speed": 8, "in_stock": 3}'
+
+echo $'\n'=== Deleting product id: delete_me ===
+curl -s -XDELETE "${STD_APP_URL}/products/delete_me" 
+
 # Test: Create Order
-echo "=== Creating Order ==="
+echo $'\n\n'=== Creating Order ===
 ORDER_ID=$(
     curl -s -XPOST "${STD_APP_URL}/orders" \
     -H 'accept: application/json' \
@@ -50,5 +60,5 @@ echo ${ORDER_ID}
 ID=$(echo ${ORDER_ID} | jq '.id')
 
 # Test: Get Order back
-echo "=== Getting Order ==="
+echo $'\n'=== Getting Order ===
 curl -s "${STD_APP_URL}/orders/${ID}" | jq .
