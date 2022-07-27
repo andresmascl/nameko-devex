@@ -28,7 +28,7 @@ else
 fi
 
 if [ -z "$3" ]; then
-	HOLD=3m
+	HOLD=20m
 else
 	HOLD="$3"
 fi

@@ -62,3 +62,12 @@ def test_decrement_stock(storage, create_product, redis_client):
     assert b'10' == product_one[b'in_stock']
     assert b'7' == product_two[b'in_stock']
     assert b'12' == product_three[b'in_stock']
+
+def test_delete(product, create_product, storage):
+    storage.create(product)
+    product_id = product['id']
+    storage.delete(f'{product_id}')
+
+    with pytest.raises(storage.NotFound) as exc:
+        storage.get(f'{product_id}')
+    assert f'Product ID {product_id} does not exist' == exc.value.args[0]

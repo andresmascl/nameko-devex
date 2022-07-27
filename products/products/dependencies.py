@@ -28,7 +28,7 @@ class StorageWrapper:
         return 'products:{}'.format(product_id)
 
     def _from_hash(self, document):
-        if document == {}:  # when hgetall cannot find a key it returns an empty array
+        if document == {}:  # sometimes hgetall cannot find a key (due to asyncronous delete calls) and it returns an empty array
             return_dic={'id':None, 'title':None,'passenger_capacity':None, 'maximum_speed':None,'in_stock':None}
         else:
             return_dic = {
@@ -42,18 +42,20 @@ class StorageWrapper:
 
 
     def get(self, product_id):
-        product = self.client.hgetall(self._format_key(product_id))
+        formated_id = self._format_key(product_id)
+        product = self.client.hgetall(formated_id)
         if not product:
             raise NotFound('Product ID {} does not exist'.format(product_id))
         else:
             return self._from_hash(product)
     
     def delete(self, product_id):
-        product = self.client.hgetall(self._format_key(product_id))
+        formated_id = self._format_key(product_id)
+        product = self.client.hgetall(formated_id)
         if not product:
             raise NotFound('Product ID {} does not exist'.format(product_id))
         else:
-            self.client.delete(self._format_key(product_id))
+            self.client.delete(formated_id)
 
 
     def list(self):
