@@ -16,7 +16,6 @@ class StorageWrapper:
     implementation of products database based on Redis key value store.
     Handling the product ID increments or keeping sorted sets of product
     names for ordering the products is out of the scope of this example.
-
     """
 
     NotFound = NotFound
@@ -48,7 +47,7 @@ class StorageWrapper:
         if not product:
             raise NotFound('Product ID {} does not exist'.format(product_id))
         else:
-            return self.client.delete(self._format_key(product_id))
+            self.client.delete(self._format_key(product_id))
 
 
     def list(self):
