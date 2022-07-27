@@ -8,7 +8,7 @@ from werkzeug import Response
 
 from gateway.entrypoints import http
 from gateway.exceptions import OrderNotFound, ProductNotFound
-from gateway.schemas import CreateOrderSchema, GetOrderSchema, ProductSchema
+from gateway.schemas import CreateOrderSchema, GetOrderSchema, ProductSchema, DeleteProductSchema
 
 
 class GatewayService(object):
@@ -72,6 +72,18 @@ class GatewayService(object):
         self.products_rpc.create(product_data)
         return Response(
             json.dumps({'id': product_data['id']}), mimetype='application/json'
+        )
+
+    @http(
+        "DELETE", "/products/<string:product_id>",
+        expected_exceptions=ProductNotFound
+    )
+    def delete_product(self, product_id):
+        """Deletes product by `product_id`
+        """
+        self.products_rpc.delete(product_id)
+        return Response(
+            json.dumps({'id': product_id}), mimetype='application/json'
         )
 
     @http("GET", "/orders/<int:order_id>", expected_exceptions=OrderNotFound)

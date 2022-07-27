@@ -12,6 +12,8 @@ class CreateOrderSchema(Schema):
         CreateOrderDetailSchema, many=True, required=True
     )
 
+class DeleteProductSchema(Schema):
+    id = fields.Str(required=True)
 
 class ProductSchema(Schema):
     id = fields.Str(required=True)
