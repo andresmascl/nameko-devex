@@ -88,13 +88,14 @@ class GatewayService(object):
         """
         try:
             self.products_rpc.delete(product_id)
+            return Response(
+                json.dumps({'id': product_id}), mimetype='application/json'
+            )        
         except Exception as e:
             print('service.py delete_product:', e)
             logger.error(msg=('service.py delete_product:', e))
             pass
-        return Response(
-            json.dumps({'id': product_id}), mimetype='application/json'
-        )
+
 
     @http("GET", "/orders/<int:order_id>", expected_exceptions=OrderNotFound)
     def get_order(self, request, order_id):
