@@ -5,6 +5,7 @@ import redis
 from products.exceptions import NotFound
 
 
+
 REDIS_URI_KEY = 'REDIS_URI'
 
 
@@ -27,13 +28,18 @@ class StorageWrapper:
         return 'products:{}'.format(product_id)
 
     def _from_hash(self, document):
-        return {
-            'id': document[b'id'].decode('utf-8'),
-            'title': document[b'title'].decode('utf-8'),
-            'passenger_capacity': int(document[b'passenger_capacity']),
-            'maximum_speed': int(document[b'maximum_speed']),
-            'in_stock': int(document[b'in_stock'])
-        }
+        if document == {}:  # when hgetall cannot find a key it returns an empty array
+            return_dic={'id':None, 'title':None,'passenger_capacity':None, 'maximum_speed':None,'in_stock':None}
+        else:
+            return_dic = {
+                'id': document[b'id'].decode('utf-8'),
+                'title': document[b'title'].decode('utf-8'),
+                'passenger_capacity': int(document[b'passenger_capacity']),
+                'maximum_speed': int(document[b'maximum_speed']),
+                'in_stock': int(document[b'in_stock'])
+            }
+        return return_dic
+
 
     def get(self, product_id):
         product = self.client.hgetall(self._format_key(product_id))

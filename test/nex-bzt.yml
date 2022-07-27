@@ -109,37 +109,6 @@ scenarios:
       then:
         - action: continue
   
-
-    #1.1 Create product for deletion product
-    # - url: /products
-    #   think-time: uniform(0s, 0s)
-    #   method: POST
-    #   headers:
-    #     cache-control: no-cache
-    #     Content-Type: application/json
-    #   body: 'request-body-string'
-    #   body: >
-    #     {
-    #       "id": "delete_me",
-    #       "title": "delete me",
-    #       "passenger_capacity": ${passenger_capacity},
-    #       "maximum_speed": ${maximum_speed},
-    #       "in_stock": ${in_stock}
-    #     }
-     
-    #   assert:
-    #   - contains:
-    #     - 200
-    #     subject: http-code
-    #     not: false
-    #   extract-jsonpath:
-    #     prod_id: $.id
-    #     default: NOT_FOUND
-        
-    # - if: '"${prod_id}" == "NOT_FOUND"'
-    #   then:
-    #     - action: continue
-  
     # 5 Delete Product
     - url: /products/${product_id}
       label: product-delete

@@ -1,7 +1,5 @@
 import json
 
-import logging
-
 from marshmallow import ValidationError
 from nameko import config
 from nameko.exceptions import BadRequest
@@ -12,8 +10,6 @@ from gateway.entrypoints import http
 from gateway.exceptions import OrderNotFound, ProductNotFound
 from gateway.schemas import CreateOrderSchema, GetOrderSchema, ProductSchema, DeleteProductSchema
 
-
-logger = logging.getLogger(__name__)
 
 
 class GatewayService(object):
@@ -86,16 +82,10 @@ class GatewayService(object):
     def delete_product(self, request, product_id):
         """Deletes product by `product_id`
         """
-        try:
-            self.products_rpc.delete(product_id)
-            return Response(
-                json.dumps({'id': product_id}), mimetype='application/json'
-            )        
-        except Exception as e:
-            print('service.py delete_product:', e)
-            logger.error(msg=('service.py delete_product:', e))
-            pass
-
+        self.products_rpc.delete(product_id)
+        return Response(
+            json.dumps({'id': product_id}), mimetype='application/json'
+        )        
 
     @http("GET", "/orders/<int:order_id>", expected_exceptions=OrderNotFound)
     def get_order(self, request, order_id):
