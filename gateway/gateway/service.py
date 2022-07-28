@@ -77,15 +77,16 @@ class GatewayService(object):
 
     @http(
         "DELETE", "/products/<string:product_id>",
-        expected_exceptions=ProductNotFound
+        expected_exceptions=(ProductNotFound)
     )
     def delete_product(self, request, product_id):
         """Deletes product by `product_id`
         """
-        self.products_rpc.delete(product_id)
+        product = self.products_rpc.delete(product_id)
         return Response(
-            json.dumps({'id': product_id}), mimetype='application/json'
-        )        
+            json.dumps({'id': product_id}), 
+            mimetype='application/json'
+        )
 
     @http("GET", "/orders/<int:order_id>", expected_exceptions=OrderNotFound)
     def get_order(self, request, order_id):

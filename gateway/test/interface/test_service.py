@@ -81,6 +81,24 @@ class TestCreateProduct(object):
         assert response.json()['error'] == 'VALIDATION_ERROR'
 
 
+class TestDeleteProduct(object):
+    def test_can_delete_product(self, gateway_service, web_session):
+        web_session.post(
+            '/products',
+            json.dumps({
+                "in_stock": 10,
+                "maximum_speed": 5,
+                "id": "the_odyssey",
+                "passenger_capacity": 101,
+                "title": "The Odyssey"
+            })
+        )
+        response = web_session.delete('/products/the_odyssey')
+        assert response.status_code == 200
+        assert response.json() == {'id': 'the_odyssey'}
+
+
+
 class TestGetOrder(object):
 
     def test_can_get_order(self, gateway_service, web_session):
