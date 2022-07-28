@@ -82,7 +82,7 @@ class GatewayService(object):
     def delete_product(self, request, product_id):
         """Deletes product by `product_id`
         """
-        product = self.products_rpc.delete(product_id)
+        self.products_rpc.delete(product_id)
         return Response(
             json.dumps({'id': product_id}), 
             mimetype='application/json'
